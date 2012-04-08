@@ -1,1 +1,12 @@
 Ventas => Sale
+Fecha  => Date
+Cliente => Client
+Nombre => Name
+Entrega => Submission
+Posición => Position
+Valor_neto => Net Value
+Moneda => Currency
+Cantidad => Amount/Quantity
+Zona => Zone/District area
+Ruta => Highway/Route
+Ciudad => City/Town
