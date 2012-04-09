@@ -24,7 +24,7 @@ def email
 end
 
 def find address
-  params = email.merge :q => address, :format => "json", :countrycodes => "CO"
+  params = email.merge :q => address, :format => "json"# , :countrycodes => "CO"
   query_params = params.map {|k,v| CGI.escape(k.to_s)+'='+CGI.escape(v.to_s) }.join("&")
 
   puts query_params
@@ -39,5 +39,5 @@ end
 first = CSV.open("../Marco/BOGOTA.csv", :headers => true, :col_sep => '|').first.to_hash
 
 first.values.each do |value|
-  puts JSON.pretty_generate(find(value))
+  puts JSON.pretty_generate(find(value['Sector']))
 end
