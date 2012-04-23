@@ -5,6 +5,23 @@ require 'net/http'
 require 'json'
 require 'cgi'
 
+if ARGV.count != 3
+  puts "Usage: #{$0} <location of BOGOTA.csv> <location of client ids csv> <location of output>"
+  exit 1
+end
+
+def bogota_location
+  ARGV[0]
+end
+
+def clients_location
+  ARGV[1]
+end
+
+def output_location
+  ARGV[2]
+end
+
 def email_filename
   "#{ENV['HOME']}/.email_address"
 end
@@ -36,8 +53,8 @@ def find address
   JSON.parse(response.body)
 end
 
-rows = CSV.open("../Marco/BOGOTA.csv", :headers => true, :return_headers => true, :col_sep => '|')
-clients = CSV.open("../Marco/John4.csv", :headers => true, :col_sep => ',')
+rows = CSV.open(bogota_location, :headers => true, :return_headers => true, :col_sep => '|')
+clients = CSV.open(clients_location, :headers => true, :col_sep => ',')
 
 output_columns = rows.first.to_hash.keys << "Address"
 
@@ -46,9 +63,11 @@ client_id_to_client_address = clients.inject({ }) do |hash, client|
   hash
 end
 
+puts client_id_to_client_address["86817"].to_hash.inspect
+
 rows_count = 0
 missing_client_ids = []
-CSV.open("../Marco/output.csv", "wb", :col_sep => '|') do |csv|
+CSV.open(output_location, "wb", :col_sep => '|') do |csv|
   csv << output_columns
   rows.each do |row|
     client_id = row['Cliente']
