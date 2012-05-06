@@ -1,0 +1,46 @@
+GEM
+  remote: http://rubygems.org/
+  specs:
+    bouncy-castle-java (1.5.0146.1)
+    git (1.2.5)
+    jruby-openssl (0.7.6.1)
+      bouncy-castle-java (>= 1.5.0146.1)
+    lucene (0.5.0.beta.1)
+    net-ftp-list (3.2.1)
+    net-sftp (2.0.5)
+      net-ssh (>= 2.0.9)
+    net-ssh (2.3.0)
+    plugin_manager (1.5)
+    redcar (0.13)
+      bouncy-castle-java
+      bundler
+      git
+      jruby-openssl
+      lucene (~> 0.5.0.beta.1)
+      net-ftp-list
+      net-sftp
+      net-ssh
+      plugin_manager
+      redcar-bundles
+      redcar-icons
+      redcar-javamateview
+      redcar-jruby
+      redcar-svnkit
+      ruby-blockcache
+      spoon
+      swt
+    redcar-bundles (0.3)
+    redcar-icons (0.3)
+    redcar-javamateview (0.2)
+      swt
+    redcar-jruby (0.1)
+    redcar-svnkit (0.2)
+    ruby-blockcache (0.2)
+    spoon (0.0.1)
+    swt (0.13)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  redcar
