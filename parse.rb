@@ -63,8 +63,6 @@ client_id_to_client_address = clients.inject({ }) do |hash, client|
   hash
 end
 
-puts client_id_to_client_address["86817"].to_hash.inspect
-
 rows_count = 0
 missing_client_ids = []
 CSV.open(output_location, "wb", :col_sep => '|') do |csv|
