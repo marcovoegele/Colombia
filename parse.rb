@@ -25,7 +25,9 @@ def email
   @email ||= _email
 end
 
+@address_cache = { }
 def find address
+  return @address_cache[address] if @address_cache[address]
   params = email.merge :q => address, :format => "json"# , :countrycodes => "CO"
   query_params = params.map {|k,v| CGI.escape(k.to_s)+'='+CGI.escape(v.to_s) }.join("&")
 
@@ -35,10 +37,14 @@ def find address
     http.get("/search?#{query_params}")
   end
 
-  JSON.parse(response.body)
+  @address_cache[address] = JSON.parse(response.body).first
+  @address_cache[address]
 end
 
 Order.all.each do |order|
   client = order.client
-  puts "Address: #{client.Address}" if client
+  if client
+    puts "Address: #{client.Address}"
+    puts find client.Address
+  end
 end
