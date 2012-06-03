@@ -1,5 +1,5 @@
 class Bogota < ActiveRecord::Base
-  has_one :client
-
   self.table_name = "Bogota"
+
+  belongs_to :client, :foreign_key => "Client ID"
 end
