@@ -14,40 +14,40 @@
 ActiveRecord::Schema.define(:version => 0) do
 
   create_table "Bogota", :force => true do |t|
-    t.integer "Sales Organization",       :null => false
-    t.integer "Distribution Channel ID",  :null => false
-    t.integer "Sector",                   :null => false
-    t.date    "Invoice Date",             :null => false
-    t.text    "Client ID",       :limit => 255, :null => false
-    t.text    "Client name",              :null => false
-    t.integer "Salesperson ID",           :null => false
-    t.text    "Salesperson name",         :null => false
-    t.integer "Invoice",                  :null => false
-    t.date    "Delivery Date",            :null => false
+    t.integer "Sales Organization",                      :null => false
+    t.integer "Distribution Channel ID",                 :null => false
+    t.integer "Sector",                                  :null => false
+    t.date    "Invoice Date",                            :null => false
+    t.text    "Client ID",                :limit => 255, :null => false
+    t.text    "Client name",                             :null => false
+    t.integer "Salesperson ID",                          :null => false
+    t.text    "Salesperson name",                        :null => false
+    t.integer "Invoice",                                 :null => false
+    t.date    "Delivery Date",                           :null => false
     t.integer "Shipment Document no."
-    t.integer "SKU",                      :null => false
-    t.integer "Location",                 :null => false
-    t.float   "Ordered Quantity",         :null => false
-    t.integer "Net Price",                :null => false
-    t.text    "Delivery Quantity",        :null => false
-    t.float   "Delta Ordered - Delivery", :null => false
-    t.text    "UOM",                      :null => false
-    t.text    "Currency",                 :null => false
-    t.float   "Cartons",                  :null => false
-    t.float   "Equivalent Cartons",       :null => false
-    t.integer "Net price delivered",      :null => false
-    t.text    "Client Group",             :null => false
-    t.float   "Return Quantity",          :null => false
-    t.integer "Returned Price",           :null => false
-    t.integer "Net Price after returns",  :null => false
-    t.integer "Sales Area",               :null => false
-    t.float   "Net Quantity",             :null => false
-    t.float   "Net Cartons",              :null => false
-    t.text    "DC",                       :null => false
-    t.text    "Route ID",                 :null => false
+    t.integer "SKU",                                     :null => false
+    t.integer "Location",                                :null => false
+    t.float   "Ordered Quantity",                        :null => false
+    t.integer "Net Price",                               :null => false
+    t.text    "Delivery Quantity",                       :null => false
+    t.float   "Delta Ordered - Delivery",                :null => false
+    t.text    "UOM",                                     :null => false
+    t.text    "Currency",                                :null => false
+    t.float   "Cartons",                                 :null => false
+    t.float   "Equivalent Cartons",                      :null => false
+    t.integer "Net price delivered",                     :null => false
+    t.text    "Client Group",                            :null => false
+    t.float   "Return Quantity",                         :null => false
+    t.integer "Returned Price",                          :null => false
+    t.integer "Net Price after returns",                 :null => false
+    t.integer "Sales Area",                              :null => false
+    t.float   "Net Quantity",                            :null => false
+    t.float   "Net Cartons",                             :null => false
+    t.text    "DC",                                      :null => false
+    t.text    "Route ID",                                :null => false
     t.integer "Rejected ID"
-    t.text    "Rejection description",    :null => false
-    t.integer "City code",                :null => false
+    t.text    "Rejection description",                   :null => false
+    t.integer "City code",                               :null => false
   end
 
   add_index "Bogota", ["Client ID"], :name => "bogota_client_id", :length => {"Client ID"=>50}
