@@ -13,28 +13,12 @@
 
 ActiveRecord::Schema.define(:version => 0) do
 
-  create_table "Orders and Deliveries per Client", :id => false, :force => true do |t|
-    t.integer "no. of Orders"
-    t.float   "Total Ordered Quantities"
-    t.float   "Total Delivered Quantities"
-    t.text    "Client ID"
-    t.integer "count(*)",                   :limit => 8, :default => 0, :null => false
-    t.float   "sum(`Ordered Quantity`)"
-    t.float   "sum(`Delivery Quantity`)"
-  end
-
-  create_table "UOM", :id => false, :force => true do |t|
-    t.text "UOM"
-    t.text "UOM ID2"
-    t.text "UOM Name"
-  end
-
-  create_table "Bogota", :id => false, :force => true do |t|
+  create_table "Bogota", :force => true do |t|
     t.integer "Sales Organization",       :null => false
     t.integer "Distribution Channel ID",  :null => false
     t.integer "Sector",                   :null => false
     t.date    "Invoice Date",             :null => false
-    t.text    "Client ID",                :null => false
+    t.text    "Client ID",       :limit => 255, :null => false
     t.text    "Client name",              :null => false
     t.integer "Salesperson ID",           :null => false
     t.text    "Salesperson name",         :null => false
@@ -96,6 +80,16 @@ ActiveRecord::Schema.define(:version => 0) do
     t.integer "Credit Limit",                   :null => false
   end
 
+  create_table "Orders and Deliveries per Client", :id => false, :force => true do |t|
+    t.integer "no. of Orders"
+    t.float   "Total Ordered Quantities"
+    t.float   "Total Delivered Quantities"
+    t.text    "Client ID"
+    t.integer "count(*)",                   :limit => 8, :default => 0, :null => false
+    t.float   "sum(`Ordered Quantity`)"
+    t.float   "sum(`Delivery Quantity`)"
+  end
+
   create_table "Products", :id => false, :force => true do |t|
     t.integer "SKU",                :null => false
     t.text    "SKU Description",    :null => false
@@ -115,6 +109,12 @@ ActiveRecord::Schema.define(:version => 0) do
     t.text    "Cube Units",         :null => false
     t.float   "Gross Weight",       :null => false
     t.text    "Units Gross Weight", :null => false
+  end
+
+  create_table "UOM", :id => false, :force => true do |t|
+    t.text "UOM"
+    t.text "UOM ID2"
+    t.text "UOM Name"
   end
 
 end
