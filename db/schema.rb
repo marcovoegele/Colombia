@@ -34,7 +34,7 @@ ActiveRecord::Schema.define(:version => 0) do
     t.integer "Distribution Channel ID",  :null => false
     t.integer "Sector",                   :null => false
     t.date    "Invoice Date",             :null => false
-    t.integer "Client ID",                :null => false
+    t.text    "Client ID",                :null => false
     t.text    "Client name",              :null => false
     t.integer "Salesperson ID",           :null => false
     t.text    "Salesperson name",         :null => false
@@ -66,7 +66,7 @@ ActiveRecord::Schema.define(:version => 0) do
     t.integer "City code",                :null => false
   end
 
-  add_index "bogota", ["Client ID"], :name => "bogota_client_id"
+  add_index "bogota", ["Client ID"], :name => "bogota_client_id", :length => {"Client ID"=>50}
 
   create_table "clients", :id => false, :force => true do |t|
     t.text    "Sales Zone",                     :null => false
