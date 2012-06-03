@@ -3,7 +3,7 @@ require 'mysql2'
 require 'hirb'
 require 'logger'
 
-ActiveRecord::Base.logger = Logger.new(STDOUT)
+ActiveRecord::Base.logger = Logger.new('log/debug.log')
 ActiveRecord::Base.configurations = YAML::load(IO.read('db/config.yml'))
 ActiveRecord::Base.establish_connection(ENV['RAILS_ENV'])
 
