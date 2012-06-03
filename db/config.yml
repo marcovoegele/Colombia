@@ -1,0 +1,11 @@
+common: &common
+  adapter: mysql2
+  database: Colombia
+  user: root
+
+shahid:
+  <<: *common
+  password: password
+
+development:
+  <<: *common
