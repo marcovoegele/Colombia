@@ -38,9 +38,7 @@ def find address
   JSON.parse(response.body)
 end
 
-Bogota.all.each do |bogota|
-  client = bogota.client
-  address = client.address
-  osm_address = find address
-  puts osm_address
+Order.all.each do |order|
+  client = order.client
+  puts "Address: #{client.Address}" if client
 end
