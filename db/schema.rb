@@ -29,7 +29,7 @@ ActiveRecord::Schema.define(:version => 0) do
     t.text "UOM Name"
   end
 
-  create_table "bogota", :id => false, :force => true do |t|
+  create_table "Bogota", :id => false, :force => true do |t|
     t.integer "Sales Organization",       :null => false
     t.integer "Distribution Channel ID",  :null => false
     t.integer "Sector",                   :null => false
@@ -66,9 +66,9 @@ ActiveRecord::Schema.define(:version => 0) do
     t.integer "City code",                :null => false
   end
 
-  add_index "bogota", ["Client ID"], :name => "bogota_client_id", :length => {"Client ID"=>50}
+  add_index "Bogota", ["Client ID"], :name => "bogota_client_id", :length => {"Client ID"=>50}
 
-  create_table "clients", :id => false, :force => true do |t|
+  create_table "Clients", :id => false, :force => true do |t|
     t.text    "Sales Zone",                     :null => false
     t.text    "Client ID",       :limit => 255, :null => false
     t.text    "Client Name 1",                  :null => false
@@ -96,7 +96,7 @@ ActiveRecord::Schema.define(:version => 0) do
     t.integer "Credit Limit",                   :null => false
   end
 
-  create_table "products", :id => false, :force => true do |t|
+  create_table "Products", :id => false, :force => true do |t|
     t.integer "SKU",                :null => false
     t.text    "SKU Description",    :null => false
     t.text    "UOM 1",              :null => false
