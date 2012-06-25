@@ -1,3 +1,5 @@
 *~
 .redcar/
 log/
+sql/*/
+!sql/create_tables/
