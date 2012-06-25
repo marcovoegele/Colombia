@@ -13,84 +13,138 @@
 
 ActiveRecord::Schema.define(:version => 0) do
 
-  create_table "Bogota", :force => true do |t|
-    t.integer "Sales Organization",                      :null => false
-    t.integer "Distribution Channel ID",                 :null => false
-    t.integer "Sector",                                  :null => false
-    t.date    "Invoice Date",                            :null => false
-    t.text    "Client ID",                :limit => 255, :null => false
-    t.text    "Client name",                             :null => false
-    t.integer "Salesperson ID",                          :null => false
-    t.text    "Salesperson name",                        :null => false
-    t.integer "Invoice",                                 :null => false
-    t.date    "Delivery Date",                           :null => false
+  create_table "bogota", :id => false, :force => true do |t|
+    t.integer "Sales Organization",       :null => false
+    t.integer "Distribution Channel ID",  :null => false
+    t.integer "Sector",                   :null => false
+    t.date    "Invoice Date",             :null => false
+    t.integer "Client ID",                :null => false
+    t.text    "Client name",              :null => false
+    t.integer "Salesperson ID",           :null => false
+    t.text    "Salesperson name",         :null => false
+    t.integer "Invoice",                  :null => false
+    t.date    "Delivery Date",            :null => false
     t.integer "Shipment Document no."
-    t.integer "SKU",                                     :null => false
-    t.integer "Location",                                :null => false
-    t.float   "Ordered Quantity",                        :null => false
-    t.integer "Net Price",                               :null => false
-    t.text    "Delivery Quantity",                       :null => false
-    t.float   "Delta Ordered - Delivery",                :null => false
-    t.text    "UOM",                                     :null => false
-    t.text    "Currency",                                :null => false
-    t.float   "Cartons",                                 :null => false
-    t.float   "Equivalent Cartons",                      :null => false
-    t.integer "Net price delivered",                     :null => false
-    t.text    "Client Group",                            :null => false
-    t.float   "Return Quantity",                         :null => false
-    t.integer "Returned Price",                          :null => false
-    t.integer "Net Price after returns",                 :null => false
-    t.integer "Sales Area",                              :null => false
-    t.float   "Net Quantity",                            :null => false
-    t.float   "Net Cartons",                             :null => false
-    t.text    "DC",                                      :null => false
-    t.text    "Route ID",                                :null => false
+    t.integer "SKU",                      :null => false
+    t.integer "Location",                 :null => false
+    t.float   "Ordered Quantity",         :null => false
+    t.integer "Net Price",                :null => false
+    t.float   "Delivery Quantity",        :null => false
+    t.float   "Delta Ordered - Delivery", :null => false
+    t.text    "UOM",                      :null => false
+    t.text    "Currency",                 :null => false
+    t.float   "Cartons",                  :null => false
+    t.float   "Equivalent Cartons",       :null => false
+    t.integer "Net price delivered",      :null => false
+    t.text    "Client Group",             :null => false
+    t.float   "Return Quantity",          :null => false
+    t.integer "Returned Price",           :null => false
+    t.integer "Net Price after returns",  :null => false
+    t.integer "Sales Area",               :null => false
+    t.float   "Net Quantity",             :null => false
+    t.float   "Net Cartons",              :null => false
+    t.text    "DC",                       :null => false
+    t.text    "Route ID",                 :null => false
     t.integer "Rejected ID"
-    t.text    "Rejection description",                   :null => false
-    t.integer "City code",                               :null => false
+    t.text    "Rejection description",    :null => false
+    t.integer "City code",                :null => false
   end
 
-  add_index "Bogota", ["Client ID"], :name => "bogota_client_id", :length => {"Client ID"=>50}
+  add_index "bogota", ["Client ID"], :name => "bogota_client_id"
+  add_index "bogota", ["Client ID"], :name => "idx_clientid"
+  add_index "bogota", ["Ordered Quantity"], :name => "idx_ordered quantity"
+  add_index "bogota", ["Ordered Quantity"], :name => "idx_orderedquantity"
+  add_index "bogota", ["Ordered Quantity"], :name => "orderedquantity_idx"
 
-  create_table "Clients", :id => false, :force => true do |t|
-    t.text    "Sales Zone",                     :null => false
-    t.text    "Client ID",       :limit => 255, :null => false
-    t.text    "Client Name 1",                  :null => false
-    t.text    "Client Name 2",                  :null => false
+  create_table "bogota_aggregate", :id => false, :force => true do |t|
+    t.integer "count",     :limit => 8, :default => 0, :null => false
+    t.integer "month"
+    t.integer "year"
+    t.integer "client_id",                             :null => false
+  end
+
+  create_table "clients", :id => false, :force => true do |t|
+    t.text    "Sales Zone",      :null => false
+    t.integer "Client ID",       :null => false
+    t.text    "Client ID 2",     :null => false
+    t.text    "Client Name 1",   :null => false
+    t.text    "Client Name 2",   :null => false
     t.text    "Address"
-    t.text    "Phone",                          :null => false
+    t.text    "Phone",           :null => false
     t.text    "Invoice ID"
     t.integer "Sales Office ID"
-    t.text    "Town",                           :null => false
-    t.text    "Town Class",                     :null => false
-    t.text    "Client Group",                   :null => false
-    t.integer "DC",                             :null => false
-    t.text    "Channel",                        :null => false
-    t.text    "Urban Flag",                     :null => false
-    t.text    "Sales Type",                     :null => false
-    t.integer "?",                              :null => false
+    t.text    "Town",            :null => false
+    t.text    "Town Class",      :null => false
+    t.text    "Client Group",    :null => false
+    t.integer "DC",              :null => false
+    t.text    "Channel",         :null => false
+    t.text    "Urban Flag",      :null => false
+    t.text    "Sales Type",      :null => false
+    t.integer "?",               :null => false
     t.text    "Special Status"
-    t.text    "??",                             :null => false
+    t.text    "??",              :null => false
     t.integer "???"
     t.text    "District"
-    t.text    "Transport Area",                 :null => false
+    t.text    "Transport Area",  :null => false
     t.integer "Transport Hub"
     t.text    "Field 4"
-    t.date    "Date",                           :null => false
-    t.integer "Credit Limit",                   :null => false
+    t.date    "Date",            :null => false
+    t.integer "Credit Limit",    :null => false
   end
 
-  create_table "Orders and Deliveries per Client", :id => false, :force => true do |t|
-    t.integer "no. of Orders"
-    t.float   "Total Ordered Quantities"
-    t.float   "Total Delivered Quantities"
-    t.text    "Client ID"
-    t.integer "count(*)",                   :limit => 8, :default => 0, :null => false
-    t.float   "sum(`Ordered Quantity`)"
-    t.float   "sum(`Delivery Quantity`)"
+  add_index "clients", ["Client ID"], :name => "idx_clients_client_id"
+
+  create_table "corrected_addresses", :id => false, :force => true do |t|
+    t.integer "ClientID",         :null => false
+    t.integer "ClientName",       :null => false
+    t.text    "Address",          :null => false
+    t.text    "Town",             :null => false
+    t.text    "Country",          :null => false
+    t.text    "CorrectedAddress", :null => false
+    t.float   "MarcoLatitude",    :null => false
+    t.float   "MarcoLongtitude",  :null => false
+    t.float   "Latitude"
+    t.float   "Longtitude"
   end
 
-  create_table "Products", :id => false, :force => true do |t|
+  create_table "join_table", :id => false, :force => true do |t|
+    t.integer "Client ID",                      :null => false
+    t.text    "Client name 1"
+    t.integer "SKU",                            :null => false
+    t.integer "No. of SKU",                     :null => false
+    t.float   "Sum of Ordered Quantity",        :null => false
+    t.float   "Sum of Delivery Quantity",       :null => false
+    t.float   "Sum of Return Quantity",         :null => false
+    t.float   "Rejected ID"
+    t.float   "Sum of Net Cartons",             :null => false
+    t.float   "Sum of Net price delivered",     :null => false
+    t.float   "Sum of Net Price after returns", :null => false
+    t.integer "DC"
+    t.text    "Channel"
+    t.text    "Town"
+  end
+
+  add_index "join_table", ["Client ID"], :name => "idx_clientid"
+  add_index "join_table", ["SKU"], :name => "idx_SKU"
+
+  create_table "main_table", :id => false, :force => true do |t|
+    t.integer "Client ID",                      :null => false
+    t.integer "SKU",                            :null => false
+    t.integer "No. of SKU",                     :null => false
+    t.float   "Sum of Ordered Quantity",        :null => false
+    t.float   "Sum of Delivery Quantity",       :null => false
+    t.float   "Sum of Return Quantity",         :null => false
+    t.float   "Rejected ID"
+    t.float   "Sum of Net price delivered",     :null => false
+    t.float   "Sum of Net Price after returns", :null => false
+    t.float   "Sum of Net Cartons",             :null => false
+  end
+
+  add_index "main_table", ["Client ID"], :name => "bogota_client_id"
+  add_index "main_table", ["Client ID"], :name => "idx_clientid"
+  add_index "main_table", ["SKU"], :name => "idx_SKU"
+
+  create_table "products", :id => false, :force => true do |t|
     t.integer "SKU",                :null => false
     t.text    "SKU Description",    :null => false
     t.text    "UOM 1",              :null => false
@@ -111,10 +165,6 @@ ActiveRecord::Schema.define(:version => 0) do
     t.text    "Units Gross Weight", :null => false
   end
 
-  create_table "UOM", :id => false, :force => true do |t|
-    t.text "UOM"
-    t.text "UOM ID2"
-    t.text "UOM Name"
-  end
+  add_index "products", ["SKU"], :name => "idx_products_sku"
 
 end

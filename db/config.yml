@@ -1,6 +1,6 @@
 common: &common
   adapter: mysql2
-  database: Colombia
+  database: colombia
   user: root
 
 shahid:
