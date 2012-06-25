@@ -38,8 +38,8 @@ def find address
     http.get(path)
   end
 
-  puts path
-  puts response.body
+  # puts path
+  # puts response.body
 
   if response.code.to_i != 200
     puts "Received error from server #{response.body}"
