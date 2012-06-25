@@ -31,7 +31,7 @@ end
 def find address
   return @address_cache[address] if @address_cache[address]
   params = email.merge :q => address, :format => "json", :countrycodes => "CO"
-  query_params = params.map {|k,v| "#{k.to_s}=#{v.to_s}" }.join("&")
+  query_params = params.map {|k,v| "#{k.to_s}=#{v.to_s.gsub(' ', '+')}" }.join("&")
   path = URI.escape "/search?#{query_params}"
 
   response = Net::HTTP.start('nominatim.openstreetmap.org', 80) do |http|
