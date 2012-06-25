@@ -2,7 +2,7 @@ use colombia;
 
 CREATE TABLE `corrected_addresses` (
   `ClientID` int(11) NOT NULL,
-  `ClientName` int(11) NOT NULL,
+  `ClientName` text NOT NULL,
   `Address` text NOT NULL,
   `Town` text NOT NULL,
   `Country` text NOT NULL,

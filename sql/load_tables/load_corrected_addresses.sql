@@ -9,7 +9,7 @@ FIELDS TERMINATED BY ','
 ENCLOSED BY '"'
 LINES TERMINATED BY '\n'
 IGNORE 1 LINES
-(`ClientID`, `ClientName`, `Address`, `Town`, `Country`, @foo, @bar, `CorrectedAddress`, @long_lat)
+(`ClientID`, `ClientName`, `Address`, `Town`, `Country`, @foo1, @foo2, `CorrectedAddress`, @long_lat, @foo3, @foo4, @foo5, @foo6, @foo7)
 Set `MarcoLatitude`=SUBSTRING_INDEX(@long_lat, ',', 1),
     `MarcoLongtitude`=SUBSTRING_INDEX(@long_lat, ',', -1),
     `Longtitude`=NULL,
