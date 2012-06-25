@@ -33,7 +33,7 @@ def find address
   params = email.merge :q => address, :format => "json", :countrycodes => "CO"
   query_params = params.map {|k,v| CGI.escape(k.to_s)+'='+CGI.escape(v.to_s) }.join("&")
 
-  puts query_params
+  # puts query_params
 
   response = Net::HTTP.start('nominatim.openstreetmap.org', 80) do |http|
     http.get("/search?#{query_params}")
@@ -46,17 +46,28 @@ end
 CorrectedAddresses.where('Latitude is null or Longtitude is null').each do |adr|
   puts "address: #{adr.CorrectedAddress}, current lat: #{adr.MarcoLatitude}, current long: #{adr.MarcoLongtitude}"
   osm_addresses = find("#{adr.CorrectedAddress} #{adr.Town}")
-  chosen_address = nil
-  choose do |menu|
-    menu.index_suffix = ") "
+  # chosen_address = nil
+  # choose do |menu|
+  #   menu.index_suffix = ") "
 
-    menu.prompt = "Please choose the closest address ? "
+  #   menu.prompt = "Please choose the closest address ? "
 
-    osm_addresses.each do |osm_address|
-      prompt = "(#{osm_address['lat']}/#{osm_address['lon']}) #{osm_address['display_name']} (#{osm_address['class']}/#{osm_address['type']})"
-      menu.choice prompt do chosen_address = osm_address end
-    end
+  #   osm_addresses.each do |osm_address|
+  #     prompt = "(#{osm_address['lat']}/#{osm_address['lon']}) #{osm_address['display_name']} (#{osm_address['class']}/#{osm_address['type']})"
+  #     menu.choice prompt do chosen_address = osm_address end
+  #   end
+  # end
+  chosen_address = osm_addresses.first
+  unless chosen_address
+    puts "Cannot find #{adr.CorrectedAddress}"
+    next
   end
+  lon = chosen_address['lon']
+  lat = chosen_address['lat']
 
-  puts "You chose: #{chosen_address}"
+  puts "Chose #{lat},#{lon} for this address #{adr.CorrectedAddress}"
+
+  adr.Longtitude = lon
+  adr.Latitude = lat
+  adr.save!
 end
