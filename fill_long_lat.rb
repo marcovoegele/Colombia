@@ -53,7 +53,7 @@ CorrectedAddresses.where('Latitude is null or Longtitude is null').each do |adr|
     menu.prompt = "Please choose the closest address ? "
 
     osm_addresses.each do |osm_address|
-      prompt = "(#{osm_address['lon']}/#{osm_address['lat']}) #{osm_address['display_name']} (#{osm_address['class']}/#{osm_address['type']})"
+      prompt = "(#{osm_address['lat']}/#{osm_address['lon']}) #{osm_address['display_name']} (#{osm_address['class']}/#{osm_address['type']})"
       menu.choice prompt do chosen_address = osm_address end
     end
   end
