@@ -4,7 +4,7 @@ $:.unshift File.dirname(__FILE__)
 
 require 'net/http'
 require 'json'
-require 'cgi'
+require 'uri'
 require 'colombia'
 require 'highline/import'
 
@@ -31,12 +31,19 @@ end
 def find address
   return @address_cache[address] if @address_cache[address]
   params = email.merge :q => address, :format => "json", :countrycodes => "CO"
-  query_params = params.map {|k,v| CGI.escape(k.to_s)+'='+CGI.escape(v.to_s) }.join("&")
-
-  # puts query_params
+  query_params = params.map {|k,v| "#{k.to_s}=#{v.to_s}" }.join("&")
+  path = URI.escape "/search?#{query_params}"
 
   response = Net::HTTP.start('nominatim.openstreetmap.org', 80) do |http|
-    http.get("/search?#{query_params}")
+    http.get(path)
+  end
+
+  puts path
+  puts response.body
+
+  if response.code.to_i != 200
+    puts "Received error from server #{response.body}"
+    return nil
   end
 
   @address_cache[address] = JSON.parse(response.body)
@@ -45,7 +52,7 @@ end
 
 CorrectedAddresses.where('Latitude is null or Longtitude is null').each do |adr|
   puts "address: #{adr.CorrectedAddress}, current lat: #{adr.MarcoLatitude}, current long: #{adr.MarcoLongtitude}"
-  osm_addresses = find("#{adr.CorrectedAddress} #{adr.Town}")
+  osm_addresses = find("#{adr.CorrectedAddress.strip}, #{adr.Town.strip}")
   # chosen_address = nil
   # choose do |menu|
   #   menu.index_suffix = ") "
@@ -59,8 +66,13 @@ CorrectedAddresses.where('Latitude is null or Longtitude is null').each do |adr|
   # end
   chosen_address = osm_addresses.first
   unless chosen_address
-    puts "Cannot find #{adr.CorrectedAddress}"
-    next
+    puts "Cannot find #{adr.CorrectedAddress} trying #{adr.Address}"
+    osm_addresses = find("#{adr.Address.strip}, #{adr.Town.strip}")
+    chosen_address = osm_addresses.first
+    unless chosen_address
+      puts "Still cannot find #{adr.Address}"
+      next
+    end
   end
   lon = chosen_address['lon']
   lat = chosen_address['lat']
