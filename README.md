@@ -37,7 +37,7 @@ Setup
 
 4. Changing the table name
 
-   from the project directory, run `redcar` and edit 'app/models/corrected_addresses.rb' and change 'corrected_addresses'
+   from the project directory, run `redcar` and edit `app/models/corrected_addresses.rb` and change `corrected_addresses`
    to the new table name.
 
 Links
