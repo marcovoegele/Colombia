@@ -27,18 +27,46 @@ def email
   @email ||= _email
 end
 
+def use_google?
+  !ENV['USE_OSM']
+end
+
+def url
+  if use_google?
+    'maps.googleapis.com'
+  else
+    'nominatim.openstreetmap.org'
+  end
+end
+
+def path
+  if use_google?
+    '/maps/api/geocode/json'
+  else
+    '/search'
+  end
+end
+
+def construct_request address
+  params=
+    if use_google?
+      { :address => address, :region => "CO", :sensor => false }
+    else
+      email.merge :q => address, :format => "json", :countrycodes => "CO"
+    end
+  query_params = params.map {|k,v| "#{k.to_s}=#{v.to_s.gsub(' ', '+')}" }.join("&")
+  URI.escape "#{path}?#{query_params}"
+end
+
 @address_cache = { }
 def find address
   return @address_cache[address] if @address_cache[address]
-  params = email.merge :q => address, :format => "json", :countrycodes => "CO"
-  query_params = params.map {|k,v| "#{k.to_s}=#{v.to_s.gsub(' ', '+')}" }.join("&")
-  path = URI.escape "/search?#{query_params}"
-
-  response = Net::HTTP.start('nominatim.openstreetmap.org', 80) do |http|
-    http.get(path)
+  response = Net::HTTP.start(url, 80) do |http|
+    request_path = construct_request address
+    puts request_path
+    http.get(request_path)
   end
 
-  # puts path
   # puts response.body
 
   if response.code.to_i != 200
@@ -50,36 +78,31 @@ def find address
   @address_cache[address]
 end
 
-CorrectedAddresses.where('Latitude is null or Longtitude is null').each do |adr|
-  puts "address: #{adr.CorrectedAddress}, current lat: #{adr.MarcoLatitude}, current long: #{adr.MarcoLongtitude}"
-  osm_addresses = find("#{adr.CorrectedAddress.strip}, #{adr.Town.strip}")
-  # chosen_address = nil
-  # choose do |menu|
-  #   menu.index_suffix = ") "
-
-  #   menu.prompt = "Please choose the closest address ? "
-
-  #   osm_addresses.each do |osm_address|
-  #     prompt = "(#{osm_address['lat']}/#{osm_address['lon']}) #{osm_address['display_name']} (#{osm_address['class']}/#{osm_address['type']})"
-  #     menu.choice prompt do chosen_address = osm_address end
-  #   end
-  # end
-  chosen_address = osm_addresses.first
-  unless chosen_address
-    puts "Cannot find #{adr.CorrectedAddress} trying #{adr.Address}"
-    osm_addresses = find("#{adr.Address.strip}, #{adr.Town.strip}")
-    chosen_address = osm_addresses.first
-    unless chosen_address
-      puts "Still cannot find #{adr.Address}"
-      next
-    end
+def get_lat_long result
+  if use_google?
+    result = result['results'].first['geometry']['location']
+    [result['lat'], result['lng']]
+  else
+    result = result.first
+    [result['lat'], result['lon']]
   end
-  lon = chosen_address['lon']
-  lat = chosen_address['lat']
+end
 
-  puts "Chose #{lat},#{lon} for this address #{adr.CorrectedAddress}"
+CorrectedAddresses.where('latitude is null or longtitude is null').each do |adr|
+  puts "address: #{adr.CorrectedAddress}, current lat: #{adr.MarcoLatitude}, current long: #{adr.MarcoLongtitude}"
+  osm_addresses = find("#{adr.CorrectedAddress.strip} bogota")
+  lat, long = get_lat_long osm_addresses
 
-  adr.Longtitude = lon
+  puts "new lat/long: #{lat}/#{long}"
+
+  adr.Longtitude = long
   adr.Latitude = lat
   adr.save!
+end
+
+CorrectedAddresses.all.each do |addr|
+  diff = [addr.MarcoLongtitude - addr.Longtitude, addr.MarcoLatitude - addr.Latitude].map(&:abs).max
+  if diff > 0.01
+    puts "address: #{addr.CorrectedAddress.strip} bogota, long: #{addr.Longtitude}, lat: #{addr.Latitude}, marco's long: #{addr.MarcoLongtitude}, marco's lat: #{addr.MarcoLatitude}"
+  end
 end

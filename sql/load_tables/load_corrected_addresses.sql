@@ -2,14 +2,14 @@
 -- , ADD PRIMARY KEY (`Client ID`(256));
 
 -- truncate colombia.clients;
-LOAD DATA LOCAL INFILE '/home/jvshahid/Documents/git/voegele/Marco/list_of_corrected_addresses.csv'
+LOAD DATA LOCAL INFILE '/home/jvshahid/Documents/git/voegele/Marco/list_of_corrected_addresses_1.csv'
 INTO TABLE colombia.corrected_addresses
 Character set 'latin1'
 FIELDS TERMINATED BY ','
 ENCLOSED BY '"'
 LINES TERMINATED BY '\n'
 IGNORE 1 LINES
-(`ClientID`, `ClientName`, `Address`, `Town`, `Country`, @foo1, @foo2, `CorrectedAddress`, @long_lat, @foo3, @foo4, @foo5, @foo6, @foo7)
+(`ClientID`, `ClientName`, `Address`, `CorrectedAddress`, Town, Country, @long_lat)
 Set `MarcoLatitude`=SUBSTRING_INDEX(@long_lat, ',', 1),
     `MarcoLongtitude`=SUBSTRING_INDEX(@long_lat, ',', -1),
     `Longtitude`=NULL,
