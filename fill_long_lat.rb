@@ -110,7 +110,7 @@ def get_lat_long result
     [result['lat'], result['lng']]
   else
     result = result.first
-    [result['lat'], result['lon']]
+    [result['lat'], result['lon']] if result
   end
 end
 
@@ -119,7 +119,11 @@ end
 CorrectedAddresses.where('latitude is null or longtitude is null').each do |address|
   puts "address: #{address.CorrectedAddress}, current lat: #{address.MarcoLatitude}, current long: #{address.MarcoLongtitude}"
   osm_addresses = find_address "#{address.CorrectedAddress.strip} bogota"
-  lat, long = get_lat_long osm_addresses
+  lat_long = get_lat_long osm_addresses
+
+  next unless lat_long
+
+  lat, long = lat_long
 
   puts "new lat/long: #{lat}/#{long}"
 
