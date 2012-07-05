@@ -8,10 +8,13 @@ require 'uri'
 require 'colombia'
 require 'highline/import'
 
+# our valid option for the api argument
 def valid_apis
   ['google', 'osm']
 end
 
+# Make sure that one argument is provided and it's value is either
+# google or osm (open street map)
 if ARGV.count != 1 || !valid_apis.include?(ARGV[0])
   puts "Usage: #{$0} geocoding-api"
   puts ""
@@ -21,10 +24,13 @@ if ARGV.count != 1 || !valid_apis.include?(ARGV[0])
   exit 1
 end
 
+# osm requires that the user provide his/her email if
+# too many queries are to be made
 def email_filename
   "#{ENV['HOME']}/.email_address"
 end
 
+# return the email if the email file exist, otherwise print a warning
 def _email
   if File.exists?(email_filename)
     email = File.readlines(email_filename).first.strip
@@ -36,6 +42,7 @@ def _email
   end
 end
 
+# save the email in memory
 def email
   @email ||= _email
 end
@@ -44,6 +51,7 @@ def use_google?
   ARGV[0] == 'google'
 end
 
+# the url of the geocoding api
 def url
   if use_google?
     'maps.googleapis.com'
@@ -52,6 +60,7 @@ def url
   end
 end
 
+# the rest of the geocoding service path (from the service documentation)
 def path
   if use_google?
     '/maps/api/geocode/json'
@@ -60,6 +69,7 @@ def path
   end
 end
 
+# construct an http request parameters (from the service documentation)
 def construct_request address
   params=
     if use_google?
@@ -71,8 +81,11 @@ def construct_request address
   URI.escape "#{path}?#{query_params}"
 end
 
+# given an address, construct an http request and get the longitude and latitude
+# from either google maps or open street maps. save the returned address in
+# memory so we don't have to make the request.
 @address_cache = { }
-def find address
+def find_address address
   return @address_cache[address] if @address_cache[address]
   response = Net::HTTP.start(url, 80) do |http|
     request_path = construct_request address
@@ -80,8 +93,7 @@ def find address
     http.get(request_path)
   end
 
-  # puts response.body
-
+  # status code other than 200 means something wrong happened
   if response.code.to_i != 200
     puts "Received error from server #{response.body}"
     return nil
@@ -91,6 +103,7 @@ def find address
   @address_cache[address]
 end
 
+# from the response, return the longitude and latitude from the first result
 def get_lat_long result
   if use_google?
     result = result['results'].first['geometry']['location']
@@ -101,18 +114,22 @@ def get_lat_long result
   end
 end
 
-CorrectedAddresses.where('latitude is null or longtitude is null').each do |adr|
-  puts "address: #{adr.CorrectedAddress}, current lat: #{adr.MarcoLatitude}, current long: #{adr.MarcoLongtitude}"
-  osm_addresses = find("#{adr.CorrectedAddress.strip} bogota")
+# Iterate over all rows with null latitude or longitude and insert the latitude/longitude
+# from either google or open street map.
+CorrectedAddresses.where('latitude is null or longtitude is null').each do |address|
+  puts "address: #{address.CorrectedAddress}, current lat: #{address.MarcoLatitude}, current long: #{address.MarcoLongtitude}"
+  osm_addresses = find_address "#{address.CorrectedAddress.strip} bogota"
   lat, long = get_lat_long osm_addresses
 
   puts "new lat/long: #{lat}/#{long}"
 
-  adr.Longtitude = long
-  adr.Latitude = lat
-  adr.save!
+  address.Longtitude = long
+  address.Latitude = lat
+  address.save!
 end
 
+# print rows that have longitude or latitude different with more than 0.01 from
+# the original latitude/longitude (MarcoLatitude/MarcoLongtitude)
 CorrectedAddresses.all.each do |addr|
   diff = [addr.MarcoLongtitude - addr.Longtitude, addr.MarcoLatitude - addr.Latitude].map(&:abs).max
   if diff > 0.01
