@@ -8,6 +8,19 @@ require 'uri'
 require 'colombia'
 require 'highline/import'
 
+def valid_apis
+  ['google', 'osm']
+end
+
+if ARGV.count != 1 || !valid_apis.include?(ARGV[0])
+  puts "Usage: #{$0} geocoding-api"
+  puts ""
+  puts "where geocoding can be one of:"
+  puts "  - google: to use google's geocoding api"
+  puts "  - osm: to use open street map geocoding api"
+  exit 1
+end
+
 def email_filename
   "#{ENV['HOME']}/.email_address"
 end
@@ -28,7 +41,7 @@ def email
 end
 
 def use_google?
-  !ENV['USE_OSM']
+  ARGV[0] == 'google'
 end
 
 def url
