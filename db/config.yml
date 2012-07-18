@@ -3,7 +3,7 @@ common: &common
   database: colombia
   user: root
 
-shahid:
+voegele:
   <<: *common
   password: password
 
