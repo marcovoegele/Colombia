@@ -106,7 +106,7 @@ end
 # from the response, return the longitude and latitude from the first result
 def get_lat_long result
   if use_google?
-    return unless result['results'] && result['result'].first && result['results'].first['geometry']
+    return unless result && result['results'] && result['results'].first && result['results'].first['geometry']
     result = result['results'].first['geometry']['location']
     [result['lat'], result['lng']]
   else
