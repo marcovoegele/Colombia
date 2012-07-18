@@ -106,6 +106,7 @@ end
 # from the response, return the longitude and latitude from the first result
 def get_lat_long result
   if use_google?
+    return unless result['results'] && result['result'].first && result['results'].first['geometry']
     result = result['results'].first['geometry']['location']
     [result['lat'], result['lng']]
   else
@@ -121,7 +122,6 @@ CorrectedAddresses.where('latitude is null or longtitude is null').each do |addr
   osm_addresses = find_address "#{address.CorrectedAddress.strip} bogota"
   next unless osm_addresses
   lat_long = get_lat_long osm_addresses
-
   next unless lat_long
 
   lat, long = lat_long
