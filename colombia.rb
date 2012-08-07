@@ -2,6 +2,7 @@ require 'active_record'
 require 'mysql2'
 require 'hirb'
 require 'logger'
+require "term/ansicolor"
 
 ActiveRecord::Base.logger = Logger.new('log/debug.log')
 ActiveRecord::Base.configurations = YAML::load(IO.read('db/config.yml'))
@@ -14,3 +15,5 @@ Dir[File.join(ROOT, 'app', 'models', '*.rb')].each do |file|
 end
 
 Hirb.enable
+
+String.send :include, Term::ANSIColor

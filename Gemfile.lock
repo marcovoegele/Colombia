@@ -60,6 +60,7 @@ GEM
       activerecord (>= 3)
       rake
     swt (0.13)
+    term-ansicolor (1.0.7)
     tzinfo (0.3.33)
 
 PLATFORMS
@@ -72,3 +73,4 @@ DEPENDENCIES
   mysql2
   redcar
   standalone_migrations
+  term-ansicolor
