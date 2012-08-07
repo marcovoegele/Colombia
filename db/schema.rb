@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 0) do
+ActiveRecord::Schema.define(:version => 20120807025754) do
 
   create_table "bogota", :id => false, :force => true do |t|
     t.integer "Sales Organization",       :null => false
@@ -93,6 +93,13 @@ ActiveRecord::Schema.define(:version => 0) do
   end
 
   add_index "clients", ["Client ID"], :name => "idx_clients_client_id"
+
+  create_table "clients_distances", :id => false, :force => true do |t|
+    t.integer "client_1_id", :null => false
+    t.integer "client_2_id", :null => false
+  end
+
+  add_index "clients_distances", ["client_1_id", "client_2_id"], :name => "clients_distance_1_2", :unique => true
 
   create_table "corrected_addresses", :id => false, :force => true do |t|
     t.integer "ClientID",         :null => false
