@@ -52,7 +52,7 @@ unless unknown_client_ids.empty?
   puts "The following list of client ids are unknown: #{unknown_client_ids.join ", "}".red.bold
 end
 
-sorted_clients_ids = known_client_ids.sort
+sorted_clients_ids = (known_client_ids & all_client_ids).sort
 sorted_clients_ids.each do |client_id|
   client              = CorrectedAddress.find(client_id)
   other_client_ids    = DistanceForClient.where('client_id > ?', client_id).map(&:client_id)
