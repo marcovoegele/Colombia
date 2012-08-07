@@ -117,7 +117,7 @@ end
 
 # Iterate over all rows with null latitude or longitude and insert the latitude/longitude
 # from either google or open street map.
-CorrectedAddresses.where('latitude is null or longtitude is null').each do |address|
+CorrectedAddress.where('latitude is null or longtitude is null').each do |address|
   puts "address: #{address.CorrectedAddress}, current lat: #{address.MarcoLatitude}, current long: #{address.MarcoLongtitude}"
   osm_addresses = find_address "#{address.CorrectedAddress.strip} bogota"
   next unless osm_addresses
@@ -135,7 +135,7 @@ end
 
 # print rows that have longitude or latitude different with more than 0.01 from
 # the original latitude/longitude (MarcoLatitude/MarcoLongtitude)
-CorrectedAddresses.all.each do |addr|
+CorrectedAddress.all.each do |addr|
   diff = [addr.MarcoLongtitude - addr.Longtitude, addr.MarcoLatitude - addr.Latitude].map(&:abs).max
   if diff > 0.01
     puts "address: #{addr.CorrectedAddress.strip} bogota, long: #{addr.Longtitude}, lat: #{addr.Latitude}, marco's long: #{addr.MarcoLongtitude}, marco's lat: #{addr.MarcoLatitude}"
