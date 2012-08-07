@@ -44,10 +44,8 @@ def get_distances origin, clients
   JSON.parse response.body
 end
 
-all_client_ids = DistanceForClient.all.map(&:client_id)
-known_clients  = CorrectedAddress.all
-known_client_ids = known_clients.map(&:ClientID)
-
+all_client_ids     = DistanceForClient.select(:client_id).map(&:client_id)
+known_client_ids   = CorrectedAddress.select(:ClientID).map(&:ClientID)
 unknown_client_ids = all_client_ids - known_client_ids
 
 unless unknown_client_ids.empty?
@@ -56,8 +54,7 @@ end
 
 sorted_clients_ids = known_client_ids.sort
 sorted_clients_ids.each do |client_id|
-  client = CorrectedAddress.find(client_id)
-
+  client              = CorrectedAddress.find(client_id)
   other_client_ids    = DistanceForClient.where('client_id > ?', client_id).map(&:client_id)
   existing_client_ids = ClientsDistance.where('client_1_id = ?', client.ClientID).map(&:client_2_id)
   missing_client_ids  = other_client_ids - existing_client_ids
