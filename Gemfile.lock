@@ -61,7 +61,7 @@ GEM
       rake
     swt (0.13)
     term-ansicolor (1.0.7)
-    tzinfo (0.3.33)
+    tzinfo (0.3.61)
 
 PLATFORMS
   ruby
